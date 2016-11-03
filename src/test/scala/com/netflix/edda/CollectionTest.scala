@@ -16,7 +16,9 @@
 package com.netflix.edda
 
 import com.netflix.edda.basic.BasicContext
-
+import junit.framework.Test
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.FunSuite
 import org.scalatest.BeforeAndAfter
 
@@ -36,6 +38,7 @@ import scala.concurrent._
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
+@RunWith(classOf[JUnitRunner])
 class CollectionTest extends FunSuite with BeforeAndAfter {
   import Utils._
   import Queryable._

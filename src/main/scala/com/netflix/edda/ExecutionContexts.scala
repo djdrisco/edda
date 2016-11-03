@@ -5,10 +5,19 @@ import java.util.concurrent.Executors
 import concurrent.ExecutionContext
 import com.netflix.servo.monitor.Monitors
 import com.netflix.servo.DefaultMonitorRegistry
+import Utils._
+
+
 
 object ThreadPools {
-  // 200 for thread parity with tomcat
-  val queryPool = Executors.newFixedThreadPool(200)
+  
+  //Note on Optimal Threads Estimation
+  //Optimal Threads = N * (1 + WT/ST)
+  //Where N equals number of processors
+  //WT = Wait Time
+  //ST = Service Time
+  
+  val queryPool = Executors.newFixedThreadPool(30) 
   DefaultMonitorRegistry.getInstance().register(Monitors.newThreadPoolMonitor("edda.threadpool.query", queryPool.asInstanceOf[ThreadPoolExecutor]))
   
   val observerPool = Executors.newFixedThreadPool(5)
