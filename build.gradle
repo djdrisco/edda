@@ -60,6 +60,7 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient:4.1'
     
     testCompile 'log4j:log4j:1.2.12'
+    testCompile 'junit:junit-dep:4.10'
     testCompile 'org.testng:testng:6.1.1'
     testCompile 'org.mockito:mockito-core:1.8.5'
     testCompile 'org.scalatest:scalatest_2.11:3.0.0-SNAP3'
@@ -102,11 +103,24 @@ tasks.withType(License).each { licenseTask ->
     licenseTask.exclude '**/*.properties'
 }
 
+task cleanupGradleLog << {
+ println 'cleanupGradleLog task!'
+ def gradle = project.getGradle()
+ new File("${gradle.getGradleUserHomeDir().getAbsolutePath()}/daemon/${gradle.getGradleVersion()}").listFiles().each{
+  if(it.getName().endsWith('out.log')){
+    logger.debug("Cleaning up log file $it")
+    it.delete()
+  }
+ }
+}
+
 jettyRun {
  webXml = file('src/main/webapp/WEB-INF/web.xml')
 }
 
-httpPort = 8080
-stopPort = 9080
+tasks.jettyRun.dependsOn(cleanupGradleLog)
+
+httpPort = 9080
+stopPort = 9090
 stopKey  = "stopKey"
 
